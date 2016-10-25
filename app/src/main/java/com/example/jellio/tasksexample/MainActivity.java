@@ -1,6 +1,9 @@
 package com.example.jellio.tasksexample;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +18,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     /*** The activity context (never know when you need it) ***/
+    private SharedPreferences prefs;
     private Context context;
 
     /*** Views used in our activity ***/
@@ -29,7 +33,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String nameString = prefs.getString("name", "Default");
+        setTitle(nameString);
         this.context = this;
 
         /*** Get the tasks saved in memory (hard coded for now) ***/
@@ -69,5 +75,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         lvTasks.setAdapter(new TasksListViewAdapter(this, tasks));
+        Button setName = (Button) findViewById(R.id.buttonSetName);
+        setName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), SetNameActivity.class);
+                startActivity(i);
+            }
+        });
     }
 }
